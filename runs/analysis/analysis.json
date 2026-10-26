@@ -1,0 +1,258 @@
+{
+  "behaviour": {
+    "runs/baseline_roberta_large": {
+      "empty_pct": 13.579697239536955,
+      "mean_pred": 0.9281685960225586,
+      "mean_true": 1.1504897595725734,
+      "over_predict_pct": 3.2353814188186405
+    },
+    "runs/ml_tfidf_logreg": {
+      "empty_pct": 4.927278124072425,
+      "mean_pred": 1.5792520035618878,
+      "mean_true": 1.1504897595725734,
+      "over_predict_pct": 38.49807064410805
+    },
+    "runs/roberta_large_rtx5060": {
+      "empty_pct": 0.9943603443158207,
+      "mean_pred": 1.2834669041258533,
+      "mean_true": 1.1504897595725734,
+      "over_predict_pct": 17.6313446126447
+    },
+    "runs/unixcoder-base": {
+      "empty_pct": 1.2763431285247848,
+      "mean_pred": 1.3021668150786583,
+      "mean_true": 1.1504897595725734,
+      "over_predict_pct": 19.412288512911843
+    },
+    "runs/deberta-v3-large": {
+      "empty_pct": 0.4007123775601068,
+      "mean_pred": 1.3037993469872367,
+      "mean_true": 1.1504897595725734,
+      "over_predict_pct": 18.788958147818345
+    },
+    "runs/modernbert-large": {
+      "empty_pct": 0.9795191451469278,
+      "mean_pred": 1.2996438112199467,
+      "mean_true": 1.1504897595725734,
+      "over_predict_pct": 18.833481745325024
+    }
+  },
+  "ablation": {
+    "threshold 0.5": {
+      "mean": 0.5720953252550133,
+      "std": 0.015880789586634664
+    },
+    "+ at least one label": {
+      "mean": 0.6042927823555617,
+      "std": 0.014465411087688984
+    },
+    "+ per-label thresholds": {
+      "mean": 0.6316753079079636,
+      "std": 0.014198959344403647
+    },
+    "+ thresholds + at least one": {
+      "mean": 0.6319729375008488,
+      "std": 0.01416936614982436
+    }
+  },
+  "ttests": {
+    "runs/baseline_roberta_large": {
+      "mean_diff_ref_minus_run": 0.2403097425068431,
+      "ref_wins": 5,
+      "folds": 5,
+      "t": 25.394534780075727,
+      "p": 1.4279527771272103e-05
+    },
+    "runs/ml_tfidf_logreg": {
+      "mean_diff_ref_minus_run": 0.2109534279423963,
+      "ref_wins": 5,
+      "folds": 5,
+      "t": 28.83817556855312,
+      "p": 8.606106064981754e-06
+    },
+    "runs/unixcoder-base": {
+      "mean_diff_ref_minus_run": 0.0027730628558763513,
+      "ref_wins": 3,
+      "folds": 5,
+      "t": 0.7345000490997066,
+      "p": 0.503378990113145
+    },
+    "runs/deberta-v3-large": {
+      "mean_diff_ref_minus_run": 0.001989633525049106,
+      "ref_wins": 4,
+      "folds": 5,
+      "t": 0.9420023975174732,
+      "p": 0.3995280860369881
+    },
+    "runs/modernbert-large": {
+      "mean_diff_ref_minus_run": 0.009583405912709519,
+      "ref_wins": 5,
+      "folds": 5,
+      "t": 3.278138906312319,
+      "p": 0.030554178715862215
+    }
+  },
+  "ensemble": {
+    "runs": [
+      "runs/roberta_large_rtx5060",
+      "runs/unixcoder-base",
+      "runs/deberta-v3-large",
+      "runs/modernbert-large"
+    ],
+    "metrics": {
+      "precision_micro": {
+        "mean": 0.7750183746809343,
+        "std": 0.013550456406156498
+      },
+      "recall_micro": {
+        "mean": 0.8738402080751246,
+        "std": 0.006832787503566791
+      },
+      "f1_micro": {
+        "mean": 0.8213980306244248,
+        "std": 0.008547984535664504
+      },
+      "precision_macro": {
+        "mean": 0.7796499099519515,
+        "std": 0.015701586418666525
+      },
+      "recall_macro": {
+        "mean": 0.8526770001594766,
+        "std": 0.006024482939810531
+      },
+      "f1_macro": {
+        "mean": 0.8086998683459099,
+        "std": 0.013303086019466292
+      },
+      "precision_samples": {
+        "mean": 0.8223572035312087,
+        "std": 0.008399453798805334
+      },
+      "recall_samples": {
+        "mean": 0.8867358905787771,
+        "std": 0.007796143015934104
+      },
+      "f1_samples": {
+        "mean": 0.838236139571956,
+        "std": 0.007637557431656549
+      },
+      "roc_auc_micro": {
+        "mean": 0.986537657996068,
+        "std": 0.001399739144716286
+      },
+      "roc_auc_macro": {
+        "mean": 0.9814653532075,
+        "std": 0.002776549336374483
+      },
+      "pr_auc_micro": {
+        "mean": 0.8973210447954131,
+        "std": 0.007144283795030259
+      },
+      "pr_auc_macro": {
+        "mean": 0.8614028755451606,
+        "std": 0.015806070755207808
+      },
+      "hamming_loss": {
+        "mean": 0.023018631658738367,
+        "std": 0.001245173959761077
+      },
+      "subset_accuracy": {
+        "mean": 0.7063094032597632,
+        "std": 0.013167887539933249
+      },
+      "jaccard_samples": {
+        "mean": 0.8049333363714275,
+        "std": 0.008584472846548685
+      }
+    },
+    "diff_vs_reference": [
+      0.02125392072996868,
+      0.03127326880119152,
+      0.0223788328387734,
+      0.02803958861651168,
+      0.02620974806405285
+    ],
+    "t": 14.059955082432095,
+    "p": 0.0001484941904953678
+  },
+  "errors": {
+    "top_confusions": [
+      {
+        "missed": "expand_java",
+        "predicted": "summary_java",
+        "count": 46
+      },
+      {
+        "missed": "expand_java",
+        "predicted": "usage_java",
+        "count": 46
+      },
+      {
+        "missed": "parameters",
+        "predicted": "usage_python",
+        "count": 31
+      },
+      {
+        "missed": "usage_python",
+        "predicted": "expand_python",
+        "count": 31
+      },
+      {
+        "missed": "expand_python",
+        "predicted": "summary_python",
+        "count": 30
+      },
+      {
+        "missed": "developmentnotes",
+        "predicted": "summary_python",
+        "count": 30
+      },
+      {
+        "missed": "parameters",
+        "predicted": "expand_python",
+        "count": 30
+      },
+      {
+        "missed": "developmentnotes",
+        "predicted": "parameters",
+        "count": 30
+      },
+      {
+        "missed": "usage_python",
+        "predicted": "developmentnotes",
+        "count": 30
+      },
+      {
+        "missed": "parameters",
+        "predicted": "developmentnotes",
+        "count": 28
+      }
+    ],
+    "exact_match": {
+      "1 true label(s)": {
+        "pct": 70.87195331273601,
+        "n": 5826
+      },
+      "2 true label(s)": {
+        "pct": 51.9607843137255,
+        "n": 816
+      },
+      "3+ true labels": {
+        "pct": 33.33333333333333,
+        "n": 96
+      },
+      "lang JAVA": {
+        "pct": 71.42266335814723,
+        "n": 2418
+      },
+      "lang PY": {
+        "pct": 62.70058708414873,
+        "n": 2555
+      },
+      "lang PHARO": {
+        "pct": 71.16147308781869,
+        "n": 1765
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "model_name": "microsoft/unixcoder-base",
+  "epochs": 25,
+  "schedule_epochs": 30,
+  "time_s": 554.8987500667572,
+  "finished_at": "2026-10-22T20:30:36"
+}

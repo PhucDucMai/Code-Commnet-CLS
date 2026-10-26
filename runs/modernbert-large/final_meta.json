@@ -1,0 +1,7 @@
+{
+  "model_name": "answerdotai/ModernBERT-large",
+  "epochs": 25,
+  "schedule_epochs": 30,
+  "time_s": 1711.513056755066,
+  "finished_at": "2026-10-23T03:56:36"
+}

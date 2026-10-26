@@ -1,0 +1,97 @@
+# RoBERTa BASELINE (assignment: "Comparing with the dedicated baselines (Transformer-based RoBERTa)")
+#
+# IDENTICAL to configs/train_rtx5060.yaml (same RoBERTa-large + LoRA, same 5 folds/seed, epochs, lr, batch)
+# but with the 4 improvements of the main method TURNED OFF, so every difference in results comes from them:
+#   1. context prompt "[LANG] class_id | sentence"  -> comment sentence only
+#   2. Asymmetric Loss                              -> plain BCE
+#   3. Weighted sampler (favors rare labels)        -> random sampling
+#   4. Per-label thresholds                         -> threshold 0.5 for every label
+#
+#   python src/train.py configs/baseline_roberta.yaml      (or let scripts/run_experiments.py run it)
+model_name: "roberta-large"
+tokenizer_name: "roberta-large"
+num_labels: 19
+max_len: 128
+
+precision: "bf16"
+gradient_checkpointing: false
+use_single_split: false
+
+cv:
+  n_splits: 5
+  start_fold: 0
+  skip_if_checkpoint_exists: true
+
+text_features:                   # (1) no context prompt
+  include_lang: false
+  include_class_id: false
+  template: "[{lang}] {class_id} | {sentence}"
+
+peft:
+  enabled: true
+  r: 32
+  alpha: 64
+  dropout: 0.05
+  target_modules: ["query", "key", "value", "dense"]
+
+loss_type: "bce"                 # (2) plain BCE, no pos_weight
+loss_params:
+  pos_weight: false
+
+sampler:                         # (3) rare labels are not favored
+  enabled: false
+
+train_params:
+  batch_size: 16
+  eval_batch_size: 32
+  grad_accum: 4
+  epochs: 30
+  lr: 0.00005
+  scheduler: "cosine"
+  warmup: 0.10
+  weight_decay: 0.01
+  seed: 42
+  num_workers: 4
+
+data:
+  raw_path: "data/raw/sentences.csv"
+  processed_path: "data/processed/"
+  expand_to_19_classes: true
+  label_list:
+    # 7 Java
+    - summary_java
+    - pointer
+    - deprecation
+    - rational
+    - ownership
+    - usage_java
+    - expand_java
+    # 5 Python
+    - summary_python
+    - parameters
+    - usage_python
+    - developmentnotes
+    - expand_python
+    # 7 Pharo
+    - keymessages
+    - intent
+    - classreferences
+    - example
+    - keyimplementationpoints
+    - responsibilities
+    - collaborators
+
+eval:
+  metrics: ["precision", "recall", "f1", "roc_auc", "pr_auc"]
+  threshold_search: false        # (4) threshold 0.5 for every label
+
+logging:
+  output_dir: "runs/baseline_roberta_large"
+  save_best: true
+  early_stop: 5
+  min_epochs: 10                 # no early stopping before epoch 10
+  save_trainable_only: true
+  tensorboard: false
+
+final_training:                  # the baseline is only for comparison, no final model needed for the demo
+  enabled: false

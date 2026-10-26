@@ -1,0 +1,80 @@
+# ======================================================================
+# Code Comment Classification — what is NOT committed
+# Committed: code, configs, dataset, demo files, docs/images, and the
+# lightweight results of every run (results.json, history_*.csv,
+# curves_*.png, oof_*.npz, ...) so the README numbers can be checked.
+# ======================================================================
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# ---- Virtual environments ----
+venv/
+.venv/
+env/
+ENV/
+
+# ---- Secrets and local settings ----
+.env
+.env.*
+.streamlit/secrets.toml
+
+# ---- Data ----
+# data/raw/sentences.csv is committed; the original per-language NLBSE files are not used
+data/code-comment-classification/
+*.xlsx
+*.arff
+
+# ---- Model weights (too large for git: ≈ 57 MB to 1.4 GB each) ----
+# Retrain with scripts/run_experiments.py, or share them separately (e.g. GitHub Releases, Hugging Face Hub).
+*.pt
+*.pth
+*.bin
+*.ckpt
+*.safetensors
+*.onnx
+
+# ---- Training logs (long; the results are in results.json / history_fold*.csv / docs/images) ----
+*.log
+
+# ---- Run artifacts that are not needed ----
+runs/**/results.before_rebuild.json
+runs/smoke_test/
+runs/smoke*/
+runs/**/tmp/
+
+# ---- Model / dataset caches if they are pointed inside the repository ----
+.cache/
+hf_cache/
+wandb/
+mlruns/
+lightning_logs/
+
+# ---- IDEs and OS ----
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ---- Temporary ----
+tmp/
+temp/
+archive/
+plots/
+*.tmp
+*.bak

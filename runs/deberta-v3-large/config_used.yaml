@@ -1,0 +1,86 @@
+model_name: microsoft/deberta-v3-large
+tokenizer_name: microsoft/deberta-v3-large
+num_labels: 19
+max_len: 128
+precision: bf16
+gradient_checkpointing: false
+use_single_split: false
+cv:
+  n_splits: 5
+  start_fold: 0
+  skip_if_checkpoint_exists: true
+text_features:
+  include_lang: true
+  include_class_id: true
+  template: '[{lang}] {class_id} | {sentence}'
+peft:
+  enabled: true
+  r: 32
+  alpha: 64
+  dropout: 0.05
+  target_modules: auto
+loss_type: asl
+loss_params:
+  gamma_pos: 0
+  gamma_neg: 4
+  clip: 0.05
+sampler:
+  enabled: true
+  type: weighted
+  smooth_eps: 1e-3
+train_params:
+  batch_size: 8
+  eval_batch_size: 16
+  grad_accum: 8
+  epochs: 30
+  lr: 5.0e-05
+  scheduler: cosine
+  warmup: 0.1
+  weight_decay: 0.01
+  seed: 42
+  num_workers: 4
+data:
+  raw_path: data/raw/sentences.csv
+  processed_path: data/processed/
+  expand_to_19_classes: true
+  label_list:
+  - summary_java
+  - pointer
+  - deprecation
+  - rational
+  - ownership
+  - usage_java
+  - expand_java
+  - summary_python
+  - parameters
+  - usage_python
+  - developmentnotes
+  - expand_python
+  - keymessages
+  - intent
+  - classreferences
+  - example
+  - keyimplementationpoints
+  - responsibilities
+  - collaborators
+eval:
+  metrics:
+  - precision
+  - recall
+  - f1
+  - roc_auc
+  - pr_auc
+  threshold_search: true
+logging:
+  output_dir: runs/deberta-v3-large
+  save_best: true
+  early_stop: 5
+  min_epochs: 10
+  save_trainable_only: true
+  tensorboard: false
+final_training:
+  enabled: true
+  epochs: 25
+  schedule_epochs: 30
+  warmup: 0.1
+  save_path: runs/deberta-v3-large/final_model.pt

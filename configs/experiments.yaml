@@ -1,0 +1,64 @@
+# Models trained with ONE command:   python scripts/run_experiments.py
+#
+# - Order = run order: the most important ones (for the assignment) first, heavy models last.
+# - A model without "config" uses base_config; "model" overrides the backbone (LoRA targets picked per architecture).
+# - Every config uses the same seed + number of folds -> the same 5 folds -> results are comparable.
+# - Re-run the command at any time (e.g. after Ctrl+C / a power cut): finished models are skipped,
+#   unfinished ones resume from their finished folds. To retrain a model from scratch: delete its output_dir.
+# - Keep batch_size × grad_accum = 64.
+
+base_config: configs/train_rtx5060.yaml
+compare_out: runs/comparison
+
+# Out of GPU memory -> automatically halve batch_size, double grad_accum (same effective batch) and retry
+oom_retry: true
+min_batch_size: 2
+
+experiments:
+  - name: ours-roberta-large          # main method; CV finished on 21/10 -> only the final model is retrained (25/30 epochs)
+    model: roberta-large
+    output_dir: runs/roberta_large_rtx5060
+    batch_size: 16
+    grad_accum: 4
+
+  - name: baseline-roberta-large      # the assignment's BASELINE: same RoBERTa-large, 4 improvements off (~3 hours)
+    config: configs/baseline_roberta.yaml
+    output_dir: runs/baseline_roberta_large
+    batch_size: 16
+    grad_accum: 4
+
+  - name: unixcoder-base              # transformer pretrained on code, fast
+    model: microsoft/unixcoder-base
+    output_dir: runs/unixcoder-base
+    batch_size: 16
+    grad_accum: 4
+
+  - name: deberta-v3-large
+    model: microsoft/deberta-v3-large
+    output_dir: runs/deberta-v3-large
+    batch_size: 8
+    grad_accum: 8
+
+  - name: modernbert-large
+    model: answerdotai/ModernBERT-large
+    output_dir: runs/modernbert-large
+    batch_size: 16
+    grad_accum: 4
+
+  # Add any model; enabled: false to skip it for now
+  - name: roberta-base
+    model: roberta-base
+    output_dir: runs/roberta-base
+    batch_size: 16
+    grad_accum: 4
+    enabled: false
+
+# Final comparison table (the FIRST folder is the reference). Folders without results are skipped.
+# The ML baseline runs separately on CPU: python scripts/ml_baseline.py
+compare_runs:
+  - runs/baseline_roberta_large       # reference: RoBERTa baseline
+  - runs/ml_tfidf_logreg              # baseline ML
+  - runs/roberta_large_rtx5060        # main method
+  - runs/unixcoder-base
+  - runs/deberta-v3-large
+  - runs/modernbert-large

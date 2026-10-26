@@ -1,0 +1,16 @@
+torch
+transformers
+peft
+scikit-learn
+iterative-stratification
+pandas
+numpy
+tqdm
+matplotlib
+seaborn
+tensorboard
+pyyaml
+sentence-transformers
+nlpaug
+streamlit>=1.50
+sentencepiece

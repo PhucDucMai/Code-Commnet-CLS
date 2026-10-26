@@ -1,0 +1,7 @@
+{
+  "model_name": "microsoft/deberta-v3-large",
+  "epochs": 25,
+  "schedule_epochs": 30,
+  "time_s": 2424.6188640594482,
+  "finished_at": "2026-10-23T00:57:57"
+}

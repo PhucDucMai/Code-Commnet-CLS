@@ -1,0 +1,578 @@
+{
+  "note": "Hand-written reference labels for the demo files in demo/examples/ and demo/test_files/ (NLBSE'23 taxonomy, conventions of data/raw/sentences.csv). Keys are normalized sentences as produced by src/preprocess_comments.py. Illustrative only: they are not part of the training data or the evaluation.",
+  "files": {
+    "DownloadManager.java": {
+      "downloads files over http and stores them in a local cache directory.": [
+        "summary_java"
+      ],
+      "each download runs on a worker thread and reports its progress to a listener.": [
+        "expand_java"
+      ],
+      "call @link #submit uri, path to start a download and keep the returned future to cancel it.": [
+        "usage_java"
+      ],
+      "for example, @code manager^submit uri, target .get blocks until the file is complete.": [
+        "usage_java"
+      ],
+      "we use a bounded thread pool because opening too many connections at once makes servers throttle us.": [
+        "rational"
+      ],
+      "partial files are written with a temporary suffix, so a crash never leaves a corrupted file behind.": [
+        "expand_java"
+      ],
+      "@see downloadlistener": [
+        "pointer"
+      ],
+      "@see java^net^http^httpclient": [
+        "pointer"
+      ],
+      "@author jane doe": [
+        "ownership"
+      ],
+      "legacy downloader that fetches files one at a time on the calling thread.": [
+        "summary_java"
+      ],
+      "@deprecated use @link downloadmanager instead, this class will be removed in version 3^0.": [
+        "deprecation"
+      ]
+    },
+    "UserCache.java": {
+      "caches @link user objects in memory to avoid repeated database lookups.": [
+        "summary_java"
+      ],
+      "use @link #get string to look up a user by id, for example": [
+        "usage_java"
+      ],
+      "@code cache^get u 42 .": [
+        "usage_java"
+      ],
+      "entries are never evicted, because the number of users is small and": [
+        "rational"
+      ],
+      "the cache is rebuilt on every deployment.": [
+        "rational"
+      ],
+      "@author jane doe": [
+        "ownership"
+      ],
+      "@see userrepository": [
+        "pointer"
+      ],
+      "@deprecated use @link redisusercache instead, this class will be removed in 3^0.": [
+        "deprecation"
+      ],
+      "thread safe holder for cache statistics.": [
+        "summary_java"
+      ],
+      "call @link #reset before each benchmark run.": [
+        "usage_java"
+      ]
+    },
+    "cache_store.py": {
+      "in memory key value cache with a time to live for every entry.": [
+        "summary_python"
+      ],
+      "expired entries are removed lazily, the next time they are read.": [
+        "expand_python"
+      ],
+      "the cache is not thread safe, so wrap it with a lock when it is shared between threads.": [
+        "usage_python"
+      ],
+      "args": [
+        "parameters"
+      ],
+      "max size int maximum number of entries kept in memory.": [
+        "parameters"
+      ],
+      "ttl float number of seconds before an entry expires.": [
+        "parameters"
+      ],
+      "example": [
+        "usage_python"
+      ],
+      "cache cachestore max size 100, ttl 30": [
+        "usage_python"
+      ],
+      "cache^put user 42 , user": [
+        "usage_python"
+      ],
+      "cache^get user 42": [
+        "usage_python"
+      ],
+      "todo add an eviction callback so callers can persist evicted entries.": [
+        "developmentnotes"
+      ],
+      "the current cleanup scans every key, which will be slow for large caches.": [
+        "developmentnotes"
+      ],
+      "decides when a cache entry should expire.": [
+        "summary_python"
+      ],
+      "attributes": [
+        "parameters"
+      ],
+      "default ttl number of seconds used when no ttl is given.": [
+        "parameters"
+      ]
+    },
+    "rate_limiter.py": {
+      "limit how often a function can be called within a time window.": [
+        "summary_python"
+      ],
+      "args": [
+        "parameters"
+      ],
+      "max calls int maximum number of calls allowed per window.": [
+        "parameters"
+      ],
+      "period float length of the window in seconds.": [
+        "parameters"
+      ],
+      "example": [
+        "usage_python"
+      ],
+      "limiter ratelimiter max calls 5, period 1^0": [
+        "usage_python"
+      ],
+      "if limiter^allow": [
+        "usage_python"
+      ],
+      "send request": [
+        "usage_python"
+      ],
+      "todo the window is fixed, not sliding.": [
+        "developmentnotes"
+      ],
+      "a sliding window would be": [
+        "developmentnotes"
+      ],
+      "more accurate but needs more memory.": [
+        "developmentnotes"
+      ],
+      "a limiter that always allows calls.": [
+        "summary_python"
+      ],
+      "useful in unit tests.": [
+        "usage_python"
+      ]
+    },
+    "OrderedQueue.class.st": {
+      "i am a priority queue that keeps my elements sorted by a sort block.": [
+        "intent"
+      ],
+      "responsibility": [
+        "responsibilities"
+      ],
+      "i store elements and always answer the smallest one first.": [
+        "responsibilities"
+      ],
+      "i keep the order stable for elements that compare as equal.": [
+        "responsibilities"
+      ],
+      "collaborators": [
+        "collaborators"
+      ],
+      "i use a sortedcollection to hold my elements and a semaphore to protect concurrent access.": [
+        "collaborators"
+      ],
+      "public api and key messages": [
+        "keymessages"
+      ],
+      "add anelement inserts an element at its sorted position": [
+        "keymessages"
+      ],
+      "removefirst answers and removes the smallest element": [
+        "keymessages"
+      ],
+      "sortblock ablock changes the ordering criterion": [
+        "keymessages"
+      ],
+      "example": [
+        "example"
+      ],
+      "queue orderedqueue sortblock a b a priority b priority .": [
+        "example"
+      ],
+      "queue add job1 add job2.": [
+        "example"
+      ],
+      "queue removefirst.": [
+        "example"
+      ],
+      "internal representation and key implementation points.": [
+        "keyimplementationpoints"
+      ],
+      "instance variables": [
+        "keyimplementationpoints"
+      ],
+      "elements a sortedcollection holding the queued elements": [
+        "keyimplementationpoints"
+      ],
+      "mutex a semaphore used as a lock around add and removefirst": [
+        "keyimplementationpoints"
+      ],
+      "insertion costs o log n because sortedcollection uses a binary search.": [
+        "keyimplementationpoints"
+      ],
+      "see also heap and orderedcollection.": [
+        "classreferences"
+      ]
+    },
+    "RetryPolicy.st": {
+      "i represent a strategy for retrying failed network requests.": [
+        "intent"
+      ],
+      "i know how many attempts are allowed and how long to wait between two attempts.": [
+        "responsibilities"
+      ],
+      "i work with httpclient, which asks me whether a failed request should be sent again.": [
+        "collaborators"
+      ],
+      "example retrypolicy maxattempts 3 delay 2 seconds shouldretry anerror": [
+        "example"
+      ]
+    },
+    "RingBuffer.class.st": {
+      "i am a fixed size circular buffer.": [
+        "intent"
+      ],
+      "when i am full, adding a new element overwrites the oldest one.": [
+        "responsibilities"
+      ],
+      "responsibility i keep the most recent elements in insertion order and answer them without copying.": [
+        "responsibilities"
+      ],
+      "collaborators i use an array to store my elements and orderedcollection when converting with #asorderedcollection.": [
+        "collaborators"
+      ],
+      "public api and key messages": [
+        "keymessages"
+      ],
+      "add anobject appends an element, dropping the oldest when full": [
+        "keymessages"
+      ],
+      "do ablock iterates from the oldest to the newest element": [
+        "keymessages"
+      ],
+      "ringbuffer new 10 creates a buffer that holds ten elements": [
+        "keymessages"
+      ],
+      "example ringbuffer new 3 add 1 add 2 add 3 add 4 asarray returns # 2 3 4": [
+        "example"
+      ],
+      "internal representation and key implementation points.": [
+        "keyimplementationpoints"
+      ],
+      "instance variables": [
+        "keyimplementationpoints"
+      ],
+      "items the array holding the elements": [
+        "keyimplementationpoints"
+      ],
+      "head index of the oldest element it moves forward modulo the capacity": [
+        "keyimplementationpoints"
+      ]
+    },
+    "PaymentProcessor.java": {
+      "charges customers through an external payment provider.": [
+        "summary_java"
+      ],
+      "implementations must be idempotent charging the same order twice must not take money twice.": [
+        "usage_java"
+      ],
+      "typical usage": [
+        "usage_java"
+      ],
+      "pre @code": [
+        "usage_java"
+      ],
+      "paymentprocessor processor new stripeprocessor apikey": [
+        "usage_java"
+      ],
+      "receipt receipt processor^charge order, amount": [
+        "usage_java"
+      ],
+      "pre": [
+        "usage_java"
+      ],
+      "@param r the type of receipt returned by the provider": [
+        "usage_java"
+      ],
+      "@see receipt": [
+        "pointer"
+      ],
+      "@author jane doe": [
+        "ownership"
+      ],
+      "payment processor backed by the stripe rest api.": [
+        "summary_java"
+      ],
+      "retries are disabled on purpose because stripe already deduplicates requests with an idempotency key.": [
+        "rational"
+      ],
+      "create one instance per api key and reuse it, since it keeps an http connection pool.": [
+        "usage_java"
+      ],
+      "@see a href https stripe^com docs api stripe api reference a": [
+        "pointer"
+      ]
+    },
+    "HttpStatus.java": {
+      "standard http status codes used by the web server.": [
+        "summary_java"
+      ],
+      "use @link #fromcode int to turn a numeric code into a constant.": [
+        "usage_java"
+      ],
+      "@see a href https www^rfc editor^org rfc rfc9110 rfc 9110 a": [
+        "pointer"
+      ],
+      "groups status codes into families such as 2xx success and 4xx client errors.": [
+        "summary_java"
+      ],
+      "the family is derived from the first digit, so non standard codes still get a family.": [
+        "expand_java"
+      ],
+      "immutable range of status codes, from @code from to @code to inclusive.": [
+        "summary_java"
+      ],
+      "ranges are compared by their lower bound.": [
+        "expand_java"
+      ]
+    },
+    "LegacyXmlParser.java": {
+      "parses configuration files written in the old xml format.": [
+        "summary_java"
+      ],
+      "the parser understands the following elements": [
+        "expand_java"
+      ],
+      "li @code server with a host and a port li": [
+        "expand_java"
+      ],
+      "li @code user with a name and a role li": [
+        "expand_java"
+      ],
+      "it is kept only for backwards compatibility, because some customers still deploy xml configuration files.": [
+        "rational"
+      ],
+      "new code should read yaml files with @link yamlconfigreader .": [
+        "usage_java"
+      ],
+      "@author jane doe": [
+        "ownership"
+      ],
+      "@author john smith": [
+        "ownership"
+      ],
+      "@deprecated since 4^0, use @link yamlconfigreader instead this class will be removed in 5^0.": [
+        "deprecation"
+      ]
+    },
+    "data_loader.py": {
+      "loads training examples from a csv file in mini batches.": [
+        "summary_python"
+      ],
+      "the file is read lazily, so memory usage does not depend on the file size.": [
+        "expand_python"
+      ],
+      "attributes": [
+        "parameters"
+      ],
+      "path location of the csv file.": [
+        "parameters"
+      ],
+      "batch size number of rows returned by each call to next batch.": [
+        "parameters"
+      ],
+      "shuffle whether the rows are shuffled at the start of every epoch.": [
+        "parameters"
+      ],
+      "example": [
+        "usage_python"
+      ],
+      "loader dataloader train^csv , batch size 32": [
+        "usage_python"
+      ],
+      "batch loader^next batch": [
+        "usage_python"
+      ],
+      "note": [
+        "developmentnotes"
+      ],
+      "shuffling currently loads every row index into memory, which should be replaced by reservoir sampling.": [
+        "developmentnotes"
+      ],
+      "default settings shared by every loader.": [
+        "summary_python"
+      ],
+      "values can be overridden per instance.": [
+        "usage_python"
+      ]
+    },
+    "retry.py": {
+      "retry a callable with exponentially growing delays between attempts.": [
+        "summary_python"
+      ],
+      "each failed attempt doubles the delay, up to a maximum.": [
+        "expand_python"
+      ],
+      "parameters": [
+        "parameters"
+      ],
+      "base delay float": [
+        "parameters"
+      ],
+      "delay in seconds before the first retry.": [
+        "parameters"
+      ],
+      "max delay float": [
+        "parameters"
+      ],
+      "upper bound for the delay in seconds.": [
+        "parameters"
+      ],
+      "max attempts int": [
+        "parameters"
+      ],
+      "number of attempts before the last error is raised.": [
+        "parameters"
+      ],
+      "examples": [
+        "usage_python"
+      ],
+      "backoff exponentialbackoff base delay 0^5, max attempts 3": [
+        "usage_python"
+      ],
+      "result backoff^run fetch page, url": [
+        "usage_python"
+      ],
+      "notes": [
+        "developmentnotes"
+      ],
+      "the delays are not randomized yet, so many clients retrying at the same time will hit the server together.": [
+        "developmentnotes"
+      ]
+    },
+    "plugin_registry.py": {
+      "keeps track of every plugin installed in the application.": [
+        "summary_python"
+      ],
+      "plugins register themselves at import time with the register decorator.": [
+        "expand_python"
+      ],
+      "param namespace prefix added to every plugin name.": [
+        "parameters"
+      ],
+      "param strict raise an error when two plugins use the same name.": [
+        "parameters"
+      ],
+      "usage": [
+        "usage_python"
+      ],
+      "registry pluginregistry cli": [
+        "usage_python"
+      ],
+      "@registry^register export": [
+        "usage_python"
+      ],
+      "class exportplugin ...": [
+        "usage_python"
+      ],
+      "warning plugins are loaded in import order, which is not guaranteed to be stable.": [
+        "developmentnotes"
+      ]
+    },
+    "HttpRouter.class.st": {
+      "i am a router that maps http requests to handler blocks.": [
+        "intent"
+      ],
+      "responsibility": [
+        "responsibilities"
+      ],
+      "i match the method and path of a request against my routes and call the first handler that fits.": [
+        "responsibilities"
+      ],
+      "i answer a 404 response when no route matches.": [
+        "responsibilities"
+      ],
+      "collaborators": [
+        "collaborators"
+      ],
+      "i receive httprequest objects from the httpserver and answer httpresponse objects.": [
+        "collaborators"
+      ],
+      "public api and key messages": [
+        "keymessages"
+      ],
+      "on amethod path apattern do ablock adds a route": [
+        "keymessages"
+      ],
+      "handle arequest answers the response of the matching route": [
+        "keymessages"
+      ],
+      "example": [
+        "example"
+      ],
+      "router httprouter new.": [
+        "example"
+      ],
+      "router on #get path users id do req usercontroller show req .": [
+        "example"
+      ],
+      "router handle httprequest get users 42 .": [
+        "example"
+      ],
+      "internal representation and key implementation points.": [
+        "keyimplementationpoints"
+      ],
+      "instance variables": [
+        "keyimplementationpoints"
+      ],
+      "routes an orderedcollection of httproute, checked in insertion order": [
+        "keyimplementationpoints"
+      ],
+      "path patterns such as users id are compiled once into a regular expression.": [
+        "keyimplementationpoints"
+      ]
+    },
+    "TComparable.trait.st": {
+      "i am a trait that gives comparison messages to any class defining .": [
+        "intent"
+      ],
+      "my users only implement and they get , , , max and min for free.": [
+        "responsibilities"
+      ],
+      "example": [
+        "example"
+      ],
+      "money uses tcomparable.": [
+        "example"
+      ],
+      "money amount 5 max money amount 7 .": [
+        "example"
+      ],
+      "i am used by money and version.": [
+        "collaborators"
+      ]
+    },
+    "MailQueue.st": {
+      "i represent a queue of e mails waiting to be sent.": [
+        "intent"
+      ],
+      "i keep the pending messages and hand them to a mailsender in batches.": [
+        "responsibilities",
+        "collaborators"
+      ],
+      "example mailqueue new add amail flush": [
+        "example"
+      ],
+      "i send e mails through an smtp server.": [
+        "intent"
+      ],
+      "i am used by mailqueue.": [
+        "collaborators"
+      ]
+    }
+  }
+}

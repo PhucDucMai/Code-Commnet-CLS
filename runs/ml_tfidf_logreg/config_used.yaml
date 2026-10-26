@@ -1,0 +1,34 @@
+model_name: TF-IDF + LogisticRegression (One-vs-Rest)
+ml_baseline:
+  model: logreg
+  threshold_search: true
+train_params:
+  seed: 42
+cv:
+  n_splits: 5
+data:
+  raw_path: data/raw/sentences.csv
+  processed_path: data/processed/
+  expand_to_19_classes: true
+  label_list:
+  - summary_java
+  - pointer
+  - deprecation
+  - rational
+  - ownership
+  - usage_java
+  - expand_java
+  - summary_python
+  - parameters
+  - usage_python
+  - developmentnotes
+  - expand_python
+  - keymessages
+  - intent
+  - classreferences
+  - example
+  - keyimplementationpoints
+  - responsibilities
+  - collaborators
+logging:
+  output_dir: runs/ml_tfidf_logreg

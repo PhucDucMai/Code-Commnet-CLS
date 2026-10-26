@@ -1,0 +1,7 @@
+{
+  "model_name": "roberta-large",
+  "epochs": 25,
+  "schedule_epochs": 30,
+  "time_s": 1825.5678458213806,
+  "finished_at": "2026-10-22T16:52:58"
+}

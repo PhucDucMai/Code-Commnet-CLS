@@ -1,0 +1,291 @@
+{
+  "split": "5fold",
+  "folds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "fold_metrics": [
+    {
+      "precision_micro": 0.6803615447822514,
+      "recall_micro": 0.5338491295938105,
+      "f1_micro": 0.5982658959537572,
+      "precision_macro": 0.6513123754165463,
+      "recall_macro": 0.4945963978735017,
+      "f1_macro": 0.5532070259708266,
+      "precision_samples": 0.5834580838323353,
+      "recall_samples": 0.5618138722554891,
+      "f1_samples": 0.5655118334759053,
+      "roc_auc_micro": 0.9253877784821382,
+      "roc_auc_macro": 0.9107350821372228,
+      "pr_auc_micro": 0.6520194390060958,
+      "pr_auc_macro": 0.5949480083960278,
+      "hamming_loss": 0.04380712259691144,
+      "subset_accuracy": 0.5127245508982036,
+      "jaccard_samples": 0.5520209580838323
+    },
+    {
+      "precision_micro": 0.7074132492113565,
+      "recall_micro": 0.5775917578879588,
+      "f1_micro": 0.6359447004608295,
+      "precision_macro": 0.7126096779145794,
+      "recall_macro": 0.5549677197440198,
+      "f1_macro": 0.6135795621650175,
+      "precision_samples": 0.6203772648299826,
+      "recall_samples": 0.5999007197815834,
+      "f1_samples": 0.6018544126511365,
+      "roc_auc_micro": 0.9313601626952126,
+      "roc_auc_macro": 0.9231875097918888,
+      "pr_auc_micro": 0.6825403247846424,
+      "pr_auc_macro": 0.6542676261712402,
+      "hamming_loss": 0.04024767801857585,
+      "subset_accuracy": 0.5346239761727476,
+      "jaccard_samples": 0.5849466368826012
+    },
+    {
+      "precision_micro": 0.6584197924980048,
+      "recall_micro": 0.5326016785022595,
+      "f1_micro": 0.588865096359743,
+      "precision_macro": 0.6330589141315883,
+      "recall_macro": 0.5130565196552139,
+      "f1_macro": 0.5604466742876513,
+      "precision_samples": 0.5745548961424333,
+      "recall_samples": 0.5495178041543026,
+      "f1_samples": 0.554320333474636,
+      "roc_auc_micro": 0.9253176250517559,
+      "roc_auc_macro": 0.9142078495433248,
+      "pr_auc_micro": 0.6265251367390154,
+      "pr_auc_macro": 0.5866990737123112,
+      "hamming_loss": 0.044978916133062624,
+      "subset_accuracy": 0.49554896142433236,
+      "jaccard_samples": 0.5395029673590505
+    },
+    {
+      "precision_micro": 0.6727853152434158,
+      "recall_micro": 0.5438709677419354,
+      "f1_micro": 0.6014983945772386,
+      "precision_macro": 0.6893861171991142,
+      "recall_macro": 0.5145665443638939,
+      "f1_macro": 0.5666142861246813,
+      "precision_samples": 0.5875246548323472,
+      "recall_samples": 0.5679240631163708,
+      "f1_samples": 0.5702662721893491,
+      "roc_auc_micro": 0.9255705499827606,
+      "roc_auc_macro": 0.9175557703899195,
+      "pr_auc_micro": 0.6588557207493765,
+      "pr_auc_macro": 0.6392000700612956,
+      "hamming_loss": 0.043483338523824355,
+      "subset_accuracy": 0.5125739644970414,
+      "jaccard_samples": 0.5556582840236687
+    },
+    {
+      "precision_micro": 0.6682501979414094,
+      "recall_micro": 0.5448676565526146,
+      "f1_micro": 0.6002844950213371,
+      "precision_macro": 0.6725268990766088,
+      "recall_macro": 0.529926592929729,
+      "f1_macro": 0.5778246909304184,
+      "precision_samples": 0.5833946529310767,
+      "recall_samples": 0.5691071866568556,
+      "f1_samples": 0.5685237744840393,
+      "roc_auc_micro": 0.9273298889750888,
+      "roc_auc_macro": 0.922569468013015,
+      "pr_auc_micro": 0.6579640072226255,
+      "pr_auc_macro": 0.622052247092402,
+      "hamming_loss": 0.04353045970334224,
+      "subset_accuracy": 0.5091979396615158,
+      "jaccard_samples": 0.5534706892322787
+    }
+  ],
+  "fold_best_epochs": [
+    25,
+    29,
+    29,
+    22,
+    24
+  ],
+  "fold_times_s": [
+    1852.7594058513641,
+    1798.238737821579,
+    1798.212907075882,
+    1618.9858002662659,
+    1740.387943983078
+  ],
+  "avg_metrics": {
+    "precision_micro": 0.6774460199352876,
+    "recall_micro": 0.5465562380557157,
+    "f1_micro": 0.6049717164745811,
+    "precision_macro": 0.6717787967476874,
+    "recall_macro": 0.5214227549132716,
+    "f1_macro": 0.574334447895719,
+    "precision_samples": 0.5898619105136349,
+    "recall_samples": 0.5696527291929203,
+    "f1_samples": 0.5720953252550133,
+    "roc_auc_micro": 0.9269932010373912,
+    "roc_auc_macro": 0.9176511359750741,
+    "pr_auc_micro": 0.6555809257003511,
+    "pr_auc_macro": 0.6194334050866555,
+    "hamming_loss": 0.0432095029951433,
+    "subset_accuracy": 0.5129338785307682,
+    "jaccard_samples": 0.5571199071162863
+  },
+  "std_metrics": {
+    "precision_micro": 0.01658202494559027,
+    "recall_micro": 0.016306230791950784,
+    "f1_micro": 0.01611056167455324,
+    "precision_macro": 0.0279135879433186,
+    "recall_macro": 0.020170448056610238,
+    "f1_macro": 0.02121885907019472,
+    "precision_samples": 0.01583533213377859,
+    "recall_samples": 0.016643856056280885,
+    "f1_samples": 0.015880789586634664,
+    "roc_auc_micro": 0.0023061910318127625,
+    "roc_auc_macro": 0.004786199782894692,
+    "pr_auc_micro": 0.01788930193596188,
+    "pr_auc_macro": 0.025620591085543824,
+    "hamming_loss": 0.0015772367189603289,
+    "subset_accuracy": 0.012544530871423331,
+    "jaccard_samples": 0.015007570558641319
+  },
+  "per_label_f1": {
+    "summary_java": {
+      "mean": 0.5305363054218952,
+      "std": 0.0421179150543124,
+      "lang": "java"
+    },
+    "pointer": {
+      "mean": 0.6436255929078895,
+      "std": 0.028242916100072228,
+      "lang": "java"
+    },
+    "deprecation": {
+      "mean": 0.8394552095718586,
+      "std": 0.05942954613266678,
+      "lang": "java"
+    },
+    "rational": {
+      "mean": 0.594352421694665,
+      "std": 0.0635197293120921,
+      "lang": "java"
+    },
+    "ownership": {
+      "mean": 0.9866666666666667,
+      "std": 0.010886621079036363,
+      "lang": "java"
+    },
+    "usage_java": {
+      "mean": 0.6809107133561817,
+      "std": 0.027201942209867734,
+      "lang": "java"
+    },
+    "expand_java": {
+      "mean": 0.510360679784025,
+      "std": 0.02026746793837858,
+      "lang": "java"
+    },
+    "summary_python": {
+      "mean": 0.4581385216467252,
+      "std": 0.04897318853171565,
+      "lang": "python"
+    },
+    "parameters": {
+      "mean": 0.7024654690313161,
+      "std": 0.022117551751384287,
+      "lang": "python"
+    },
+    "usage_python": {
+      "mean": 0.674906480098842,
+      "std": 0.019954767541028574,
+      "lang": "python"
+    },
+    "developmentnotes": {
+      "mean": 0.07845013030087658,
+      "std": 0.04728783376526319,
+      "lang": "python"
+    },
+    "expand_python": {
+      "mean": 0.4523252445186112,
+      "std": 0.04934697110744599,
+      "lang": "python"
+    },
+    "keymessages": {
+      "mean": 0.5306170721201365,
+      "std": 0.05257423701765701,
+      "lang": "pharo"
+    },
+    "intent": {
+      "mean": 0.7680679821290226,
+      "std": 0.03639786352796102,
+      "lang": "pharo"
+    },
+    "classreferences": {
+      "mean": 0.3457012095456031,
+      "std": 0.137797243195487,
+      "lang": "pharo"
+    },
+    "example": {
+      "mean": 0.7568982636198675,
+      "std": 0.016860039323949062,
+      "lang": "pharo"
+    },
+    "keyimplementationpoints": {
+      "mean": 0.39782160176357667,
+      "std": 0.07991030558253356,
+      "lang": "pharo"
+    },
+    "responsibilities": {
+      "mean": 0.5701235633305721,
+      "std": 0.0718080265869837,
+      "lang": "pharo"
+    },
+    "collaborators": {
+      "mean": 0.3909313825103299,
+      "std": 0.06099929575943345,
+      "lang": "pharo"
+    }
+  },
+  "median_thresholds": [
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5
+  ],
+  "label_list": [
+    "summary_java",
+    "pointer",
+    "deprecation",
+    "rational",
+    "ownership",
+    "usage_java",
+    "expand_java",
+    "summary_python",
+    "parameters",
+    "usage_python",
+    "developmentnotes",
+    "expand_python",
+    "keymessages",
+    "intent",
+    "classreferences",
+    "example",
+    "keyimplementationpoints",
+    "responsibilities",
+    "collaborators"
+  ]
+}

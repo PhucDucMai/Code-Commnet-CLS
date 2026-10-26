@@ -1,0 +1,97 @@
+# Original config of the repository, made for a 46 GB GPU (NVIDIA L40S): batch 64, fp32.
+# It does NOT fit an 8 GB GPU (CUDA out of memory) -> use configs/train_rtx5060.yaml instead.
+model_name: "roberta-large"
+tokenizer_name: "roberta-large"
+num_labels: 19
+max_len: 128
+
+# L40S 46GB: bf16 is stable and uses VRAM well; "fp16" or "fp32" also work
+precision: "fp32"
+gradient_checkpointing: false
+use_single_split: false           # <-- 5-fold CV
+
+cv:                               # a single cv key (the original file repeated it at the end, which skipped fold 0)
+  n_splits: 5
+  start_fold: 0
+  skip_if_checkpoint_exists: true  # resume after an interruption
+
+text_features:
+  include_lang: true
+  include_class_id: true
+  template: "[{lang}] {class_id} | {sentence}"
+
+peft:
+  enabled: true                  # true = LoRA; false = full fine-tuning
+  r: 32
+  alpha: 64
+  dropout: 0.05
+  target_modules: ["query", "key", "value", "dense"]
+
+# Loss: 'asl' (default) | 'bce' (pos_weight) | 'focal'
+loss_type: "asl"
+loss_params:
+  gamma_pos: 0
+  gamma_neg: 4
+  clip: 0.05
+
+# The sampler helps rare labels: enable it if macro/samples F1 is low because of label imbalance
+sampler:
+  enabled: true
+  type: "weighted"               # only "weighted" is supported
+  smooth_eps: 1e-3
+
+train_params:
+  batch_size: 64                # L40S 46GB with roberta-large + seq=128 is OK
+  eval_batch_size: 64
+  grad_accum: 1
+  epochs: 100
+  lr: 0.00005
+  scheduler: "cosine"            # "cosine" | "linear"
+  warmup: 0.10
+  weight_decay: 0.01
+  seed: 42
+  num_workers: 4
+
+data:
+  raw_path: "data/raw/sentences.csv"
+  processed_path: "data/processed/"
+  expand_to_19_classes: true     # split summary/usage/expand by language (Java/Python)
+  label_list:
+    # 7 Java
+    - summary_java
+    - pointer
+    - deprecation
+    - rational
+    - ownership
+    - usage_java
+    - expand_java
+    # 5 Python
+    - summary_python
+    - parameters
+    - usage_python
+    - developmentnotes
+    - expand_python
+    # 7 Pharo
+    - keymessages
+    - intent
+    - classreferences
+    - example
+    - keyimplementationpoints
+    - responsibilities
+    - collaborators
+
+eval:
+  metrics: ["precision", "recall", "f1", "roc_auc", "pr_auc"]
+  threshold_search: true         # tune thresholds every epoch (F1(samples))
+
+logging:
+  output_dir: "runs/roberta_large_ccc_19cv_fold_validation"
+  save_best: true
+  early_stop: 10
+  tensorboard: false
+
+final_training:                   # (optional) retrain on the full data after CV
+  enabled: true
+  epochs: 50
+  warmup: 0.10
+  save_path: "runs/roberta_large_ccc_19cv_fold_validation/final_model.pt"
