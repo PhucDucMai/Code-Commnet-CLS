@@ -3,6 +3,7 @@
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](#5-installation)
 [![PyTorch](https://img.shields.io/badge/pytorch-2.x-red.svg)](#5-installation)
 [![HF Transformers](https://img.shields.io/badge/transformers-4.x-ff69b4.svg)](#5-installation)
+[![tests](https://github.com/PhucDucMai/Code-Commnet-CLS/actions/workflows/tests.yml/badge.svg)](https://github.com/PhucDucMai/Code-Commnet-CLS/actions/workflows/tests.yml)
 
 Classify every sentence of a source-code comment into the categories of the **NLBSE’23 code comment classification** dataset: 6,738 sentences from Java, Python and Pharo projects, **19 labels, multi-label** (a sentence can have several labels).
 
@@ -88,7 +89,7 @@ Sentences are lowercased fragments of class comments, e.g. `@link #applicationst
         │
    RoBERTa-large + LoRA (r = 32, α = 64, dropout 0.05, on query/key/value/dense)
         │
-   masked mean pooling over non-padding tokens (instead of [CLS])
+   masked mean pooling over non-padding tokens (instead of [CLS]; ablation in §3.9)
         │
    MLP head 1024 → 512 → 19 (LayerNorm, GELU, dropout)
         │
@@ -238,6 +239,25 @@ The main model reaches 0.78 F1 (samples) at epoch 10 and its best epochs are 23�
   <img src="docs/images/training_curves.png" width="780" alt="Validation F1 per epoch of the five transformer runs, and train vs validation loss of the main model">
 </p>
 
+### 3.9 Pooling ablation: mean pooling vs first token
+
+Same model, recipe, folds and seed as ours; only the sentence vector changes: the mean of the non-padding tokens (ours) or the first token `<s>` (the `[CLS]` equivalent of RoBERTa). Run: `runs/ablation_cls_pooling` (`configs/ablation_cls_pooling.yaml`).
+
+| Pooling | F1 samples | F1 micro | F1 macro | PR-AUC | ROC-AUC | Jaccard | Exact match | Hamming ↓ | CV time |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Mean (ours) | 0.8124 ± 0.0064 | 0.7973 | 0.7829 | 0.8198 | 0.9665 | 0.7790 | 0.6805 | 0.0260 | 2 h 41 min |
+| First token `<s>` | 0.8089 ± 0.0074 | 0.7950 | 0.7803 | 0.8176 | 0.9664 | 0.7750 | 0.6751 | 0.0262 | 2 h 50 min |
+
+| Test (mean − first token) | Result |
+|---|---|
+| F1 samples per fold | +0.0040 · −0.0086 · +0.0127 · +0.0042 · +0.0054 → **+0.0035**, mean pooling wins 4 / 5 folds, paired t-test p = 0.36 |
+| Paired bootstrap over the 6,738 out-of-fold sentences (5,000 resamples) | Δ F1 samples = +0.0036, 95% CI [−0.0023, +0.0093] |
+| McNemar test on exact match | 496 sentences right only with mean pooling, 460 only with `<s>`, p = 0.26 |
+| Per language (macro F1) | Java −0.0057 · Python +0.0078 · Pharo +0.0071 |
+| Per label | mean pooling better on 12 / 19 labels |
+
+**Conclusion:** mean pooling is slightly ahead on almost every metric, but the difference (≈ 0.004) is smaller than the fold-to-fold spread (std ≈ 0.007) and no test is significant. On this task the pooling choice does not matter measurably; the gain over the RoBERTa baseline (+0.24, [§3.2](#32-comparison-with-the-roberta-baseline)) comes from the training recipe. Each setting was trained once (one seed), so GPU non-determinism is part of the observed difference.
+
 ---
 
 ## 4. Repository structure
@@ -257,6 +277,7 @@ CodeCommentClassification/
 ├── configs/
 │   ├── train_rtx5060.yaml         # main method, fits an 8 GB GPU (default of src/train.py)
 │   ├── baseline_roberta.yaml      # RoBERTa baseline (plain fine-tuning)
+│   ├── ablation_cls_pooling.yaml  # ablation: first-token (<s>) pooling instead of mean pooling
 │   ├── experiments.yaml           # list of models for scripts/run_experiments.py
 │   ├── train_l40s.yaml            # original config of the upstream repository (46 GB GPU)
 │   └── smoke_test.yaml            # 2 folds × 1 epoch with roberta-base, to check the setup
@@ -266,6 +287,7 @@ CodeCommentClassification/
 │   ├── inference.py               # load a trained run, classify a code file
 │   ├── examples/                  # 8 showcase files + expected_labels.json
 │   └── test_files/                # 10 test files with varied styles and edge cases
+├── tests/                         # pytest suite: extraction, data consistency, metrics, loss, model (CPU, no weights)
 ├── docs/images/                   # figures and screenshots used in this README
 ├── data/
 │   ├── raw/sentences.csv          # NLBSE’23 dataset
@@ -274,6 +296,10 @@ CodeCommentClassification/
 ├── legacy/                        # upstream per-category ML scripts, not runnable (see legacy/README.md)
 ├── references/STACC/              # NLBSE’23 submission of TU Delft (SetFit), for reference
 ├── requirements.txt
+├── .github/workflows/             # CI (tests.yml) and release (release.yml) on GitHub Actions
+├── requirements-dev.txt           # requirements.txt + pytest + ruff
+├── requirements-test.txt          # minimal dependencies of the test suite (CI, with CPU PyTorch)
+├── pytest.ini · ruff.toml         # test and lint settings
 └── README.md
 ```
 
@@ -342,6 +368,7 @@ python src/train.py [CONFIG] [options]
 | `--output-dir DIR` | Results folder |
 | `--batch-size N`, `--grad-accum N` | Override the batch (keep `batch × accum = 64` to compare runs) |
 | `--resume` | Skip folds that already have a checkpoint (continue after an interruption) |
+| `--pooling mean\|cls` | Sentence vector: mean of the non-padding tokens (default) or the first token `<s>` / `[CLS]` |
 | `--final-only` | Skip CV; retrain only the final model on all data with the median thresholds of `results.json` |
 
 A run does two things: **5-fold cross-validation** (the reported numbers) and, if `final_training.enabled`, a **final model** trained on all 6,738 sentences for the demo. Exit code 3 means CUDA out of memory.
@@ -364,6 +391,7 @@ At the end of the cross-validation, a summary per fold and per label (weakest la
 |---|---|---|
 | `train_rtx5060.yaml` | main method | RoBERTa-large + LoRA, bf16, batch 16 × 4, ≤ 30 epochs, ASL, sampler, prompt, threshold search, final model 25 of 30 epochs |
 | `baseline_roberta.yaml` | RoBERTa baseline | same as above but `loss_type: bce` (`pos_weight: false`), `sampler.enabled: false`, no prompt, `threshold_search: false`, no final model |
+| `ablation_cls_pooling.yaml` | pooling ablation | same as `train_rtx5060.yaml` but `pooling: cls` (first token `<s>` instead of mean pooling), no final model |
 | `smoke_test.yaml` | setup check | roberta-base, 2 folds, 1 epoch, `max_len` 64 |
 | `train_l40s.yaml` | upstream config | batch 64, fp32, ≤ 100 epochs; needs a ≈ 46 GB GPU |
 
@@ -371,6 +399,7 @@ Important fields:
 
 ```yaml
 model_name: "roberta-large"
+pooling: "mean"                   # mean of the non-padding tokens | cls = first token (<s>)
 precision: "bf16"                 # fp32 | fp16 | bf16
 cv: {n_splits: 5, start_fold: 0, skip_if_checkpoint_exists: true}
 text_features: {include_lang: true, include_class_id: true, template: "[{lang}] {class_id} | {sentence}"}
@@ -443,6 +472,37 @@ Both baselines use the same 5 folds and write `results.json` in the same format.
 
 Metrics: **F1 (samples)** (main metric; F1 of each sentence’s label set averaged over sentences, also used for model selection and thresholds), F1 micro, F1 macro, PR-AUC and ROC-AUC (macro, threshold-independent), Jaccard (samples), exact match (subset accuracy) and Hamming loss.
 
+### Tests
+
+```bash
+pip install -r requirements-dev.txt
+pytest                                   # whole suite, ≈ 5 s on CPU
+pytest tests/test_preprocess.py -v       # one file, one line per test
+pytest -k pooling                        # only tests whose name contains "pooling"
+```
+
+The suite needs neither a GPU nor the trained weights (the model tests build a tiny random RoBERTa locally).
+
+| File | What it checks |
+|---|---|
+| `tests/test_preprocess.py` | normalization rules, sentence splitting, class-comment extraction for Java, Python, Pharo Tonel and File Out, prompt format |
+| `tests/test_data_and_samples.py` | dataset size and label counts, normalization reproduces the dataset sentences, 19 labels in the configs, the pooling ablation config differs only where intended, every demo file parses and its expected labels match the extracted sentences |
+| `tests/test_metrics_and_training.py` | metrics on hand-computed examples, threshold search, Asymmetric Loss vs BCE, weighted sampler, command-line overrides, demo decision rules |
+| `tests/test_model.py` | output shapes for mean and first-token pooling, mean pooling ignores padding, LoRA trains only adapters + head, trainable-only checkpoints restore the same predictions |
+
+### Continuous integration and releases
+
+| Workflow | Trigger | What it does |
+|---|---|---|
+| `.github/workflows/tests.yml` | every push to `main`, every pull request, manual run | `ruff` (syntax errors and undefined names), then the test suite on Python 3.10 and 3.12 with CPU PyTorch (≈ 3–5 min) |
+| `.github/workflows/release.yml` | pushing a tag `v*` | runs the tests, then creates a GitHub Release with `results-<tag>.zip` (results, histories, comparisons, analyses, figures) |
+
+```bash
+ruff check .                         # same lint as CI (settings in ruff.toml; legacy/ and references/ excluded)
+git tag v1.0 && git push origin v1.0                                  # publish a release
+gh release upload v1.0 runs/roberta_large_rtx5060/final_model.pt      # then attach the weights (not in git)
+```
+
 ---
 
 ## 10. Demo and inference
@@ -488,6 +548,8 @@ for r in rows:
 * **Not the official NLBSE’23 protocol**, which averages the F1 of 19 binary tasks on the fixed `partition` test split; our numbers are therefore not directly comparable with published ones. F1 macro is the closest of our metrics.
 * **Five folds** give limited statistical power; small differences (e.g. ModernBERT, p = 0.03) are weak evidence.
 * The prompt, loss and sampler were evaluated **together**; their individual effects need separate ablation runs.
+* Every transformer result above uses **mean pooling** (the RoBERTa baseline too), so the gain over the baseline does not come from pooling. The pooling ablation ([§3.9](#39-pooling-ablation-mean-pooling-vs-first-token)) finds no significant difference between mean pooling and the first token (+0.0035 F1 samples, p = 0.36). Reproduce it with `python scripts/run_experiments.py --only ablation-cls-pooling`, then `python scripts/compare_runs.py runs/roberta_large_rtx5060 runs/ablation_cls_pooling --out runs/comparison_pooling`.
+* The mean-pooling run was trained with an earlier version of `src/train.py` than the ablation; the training logic is the same (only logging, checkpoint format and the `min_epochs` guard changed, and no fold of either run stopped before epoch 23).
 
 ---
 
