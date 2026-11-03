@@ -1,0 +1,291 @@
+{
+  "split": "5fold",
+  "folds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "fold_metrics": [
+    {
+      "precision_micro": 0.7451205510907003,
+      "recall_micro": 0.8368794326241135,
+      "f1_micro": 0.7883389006984513,
+      "precision_macro": 0.747264464845111,
+      "recall_macro": 0.8103785883709294,
+      "f1_macro": 0.7723427637549533,
+      "precision_samples": 0.7891092814371258,
+      "recall_samples": 0.8531062874251497,
+      "f1_samples": 0.8030367835757057,
+      "roc_auc_micro": 0.9721221026937845,
+      "roc_auc_macro": 0.9618656368797268,
+      "pr_auc_micro": 0.8447019697220928,
+      "pr_auc_macro": 0.8067644964283271,
+      "hamming_loss": 0.027458241411913015,
+      "subset_accuracy": 0.656437125748503,
+      "jaccard_samples": 0.7659056886227545
+    },
+    {
+      "precision_micro": 0.7687353629976581,
+      "recall_micro": 0.845460399227302,
+      "f1_micro": 0.8052744556884391,
+      "precision_macro": 0.7809382811914908,
+      "recall_macro": 0.8268246171779293,
+      "f1_macro": 0.7983954695090874,
+      "precision_samples": 0.8065897244973939,
+      "recall_samples": 0.8572846860263093,
+      "f1_samples": 0.8166046165301564,
+      "roc_auc_micro": 0.9773200662767062,
+      "roc_auc_macro": 0.9724435013779671,
+      "pr_auc_micro": 0.8613721699635508,
+      "pr_auc_macro": 0.8385331006490666,
+      "hamming_loss": 0.024885370537288867,
+      "subset_accuracy": 0.6887565152643336,
+      "jaccard_samples": 0.7846239761727476
+    },
+    {
+      "precision_micro": 0.7597633136094675,
+      "recall_micro": 0.828921885087153,
+      "f1_micro": 0.7928372954615622,
+      "precision_macro": 0.7558077319192502,
+      "recall_macro": 0.7919607547074912,
+      "f1_macro": 0.7666081547741804,
+      "precision_samples": 0.7943867457962412,
+      "recall_samples": 0.8402571711177051,
+      "f1_samples": 0.8033630069238378,
+      "roc_auc_micro": 0.9748285025532959,
+      "roc_auc_macro": 0.9661866781309109,
+      "pr_auc_micro": 0.8479110617332614,
+      "pr_auc_macro": 0.8013770743703499,
+      "hamming_loss": 0.02619865687958769,
+      "subset_accuracy": 0.6876854599406528,
+      "jaccard_samples": 0.774171612265084
+    },
+    {
+      "precision_micro": 0.7664531158998252,
+      "recall_micro": 0.8490322580645161,
+      "f1_micro": 0.8056320783593511,
+      "precision_macro": 0.7913205436483751,
+      "recall_macro": 0.8122467889395317,
+      "f1_macro": 0.7935085189718337,
+      "precision_samples": 0.8054733727810651,
+      "recall_samples": 0.8657544378698225,
+      "f1_samples": 0.8191568047337278,
+      "roc_auc_micro": 0.9771023737167203,
+      "roc_auc_macro": 0.9657140970764236,
+      "pr_auc_micro": 0.8613034119422236,
+      "pr_auc_macro": 0.8334638457914354,
+      "hamming_loss": 0.02471971348489567,
+      "subset_accuracy": 0.6863905325443787,
+      "jaccard_samples": 0.7854413214990137
+    },
+    {
+      "precision_micro": 0.732433951658235,
+      "recall_micro": 0.841187863137508,
+      "f1_micro": 0.7830528846153846,
+      "precision_macro": 0.7470531100373757,
+      "recall_macro": 0.8091297722813658,
+      "f1_macro": 0.7707871354017436,
+      "precision_samples": 0.7845842531272995,
+      "recall_samples": 0.8570026980623008,
+      "f1_samples": 0.8021339220014718,
+      "roc_auc_micro": 0.9733218009535146,
+      "roc_auc_macro": 0.9657197085448743,
+      "pr_auc_micro": 0.8430742070820534,
+      "pr_auc_macro": 0.8076607774365986,
+      "hamming_loss": 0.027961736571008096,
+      "subset_accuracy": 0.6563649742457689,
+      "jaccard_samples": 0.7649006622516556
+    }
+  ],
+  "fold_best_epochs": [
+    24,
+    25,
+    26,
+    26,
+    27
+  ],
+  "fold_times_s": [
+    2019.9806134700775,
+    2092.0493462085724,
+    2053.7693502902985,
+    2036.5305721759796,
+    2000.6374247074127
+  ],
+  "avg_metrics": {
+    "precision_micro": 0.7545012590511773,
+    "recall_micro": 0.8402963676281185,
+    "f1_micro": 0.7950271229646376,
+    "precision_macro": 0.7644768263283206,
+    "recall_macro": 0.8101081042954494,
+    "f1_macro": 0.7803284084823596,
+    "precision_samples": 0.7960286755278252,
+    "recall_samples": 0.8546810561002575,
+    "f1_samples": 0.8088590267529799,
+    "roc_auc_micro": 0.9749389692388043,
+    "roc_auc_macro": 0.9663859244019806,
+    "pr_auc_micro": 0.8516725640886363,
+    "pr_auc_macro": 0.8175598589351555,
+    "hamming_loss": 0.026244743776938667,
+    "subset_accuracy": 0.6751269215487274,
+    "jaccard_samples": 0.7750086521622511
+  },
+  "std_metrics": {
+    "precision_micro": 0.013770327177511636,
+    "recall_micro": 0.006997600534664628,
+    "f1_micro": 0.009059613153948853,
+    "precision_macro": 0.018256884350077777,
+    "recall_macro": 0.011084875887346576,
+    "f1_macro": 0.012986036979666238,
+    "precision_samples": 0.008743990089776,
+    "recall_samples": 0.008310439800350974,
+    "f1_samples": 0.00742118825840541,
+    "roc_auc_micro": 0.0020450973239910966,
+    "roc_auc_macro": 0.003407701063884711,
+    "pr_auc_micro": 0.008043698322446663,
+    "pr_auc_macro": 0.015292009994468895,
+    "hamming_loss": 0.001311211482820896,
+    "subset_accuracy": 0.01530797685984917,
+    "jaccard_samples": 0.008798080317212492
+  },
+  "per_label_f1": {
+    "summary_java": {
+      "mean": 0.7767408750006373,
+      "std": 0.015651192752769636,
+      "lang": "java"
+    },
+    "pointer": {
+      "mean": 0.8484397847439766,
+      "std": 0.026667794360415973,
+      "lang": "java"
+    },
+    "deprecation": {
+      "mean": 0.9036113719798514,
+      "std": 0.04692087479457475,
+      "lang": "java"
+    },
+    "rational": {
+      "mean": 0.8146324274636434,
+      "std": 0.04514422579224374,
+      "lang": "java"
+    },
+    "ownership": {
+      "mean": 0.9955555555555555,
+      "std": 0.008888888888888903,
+      "lang": "java"
+    },
+    "usage_java": {
+      "mean": 0.8870012259751074,
+      "std": 0.016840338311117684,
+      "lang": "java"
+    },
+    "expand_java": {
+      "mean": 0.7485868251634362,
+      "std": 0.04589646088306259,
+      "lang": "java"
+    },
+    "summary_python": {
+      "mean": 0.7448752794672505,
+      "std": 0.03876140545177191,
+      "lang": "python"
+    },
+    "parameters": {
+      "mean": 0.8065870558384557,
+      "std": 0.013098783135923144,
+      "lang": "python"
+    },
+    "usage_python": {
+      "mean": 0.8023972604445053,
+      "std": 0.017497483532743656,
+      "lang": "python"
+    },
+    "developmentnotes": {
+      "mean": 0.5984292330454719,
+      "std": 0.057868955880376466,
+      "lang": "python"
+    },
+    "expand_python": {
+      "mean": 0.6788821426684322,
+      "std": 0.011617777278867876,
+      "lang": "python"
+    },
+    "keymessages": {
+      "mean": 0.8031677373106912,
+      "std": 0.03917827443485994,
+      "lang": "pharo"
+    },
+    "intent": {
+      "mean": 0.8718782330017035,
+      "std": 0.031033955075870614,
+      "lang": "pharo"
+    },
+    "classreferences": {
+      "mean": 0.616032708032708,
+      "std": 0.07686834494553955,
+      "lang": "pharo"
+    },
+    "example": {
+      "mean": 0.9110474731054495,
+      "std": 0.017686094520023316,
+      "lang": "pharo"
+    },
+    "keyimplementationpoints": {
+      "mean": 0.758365340737764,
+      "std": 0.03436962632799116,
+      "lang": "pharo"
+    },
+    "responsibilities": {
+      "mean": 0.7172966930517573,
+      "std": 0.03446046022106603,
+      "lang": "pharo"
+    },
+    "collaborators": {
+      "mean": 0.542712538578437,
+      "std": 0.07417912433445098,
+      "lang": "pharo"
+    }
+  },
+  "median_thresholds": [
+    0.8191919326782227,
+    0.7626262903213501,
+    0.7060605883598328,
+    0.7707070708274841,
+    0.5767676830291748,
+    0.6252525448799133,
+    0.6744897961616516,
+    0.6928571462631226,
+    0.5642856955528259,
+    0.527550995349884,
+    0.6414141654968262,
+    0.6898989677429199,
+    0.7626262903213501,
+    0.8434343338012695,
+    0.786868691444397,
+    0.5929293036460876,
+    0.6171717047691345,
+    0.6561224460601807,
+    0.8765305876731873
+  ],
+  "label_list": [
+    "summary_java",
+    "pointer",
+    "deprecation",
+    "rational",
+    "ownership",
+    "usage_java",
+    "expand_java",
+    "summary_python",
+    "parameters",
+    "usage_python",
+    "developmentnotes",
+    "expand_python",
+    "keymessages",
+    "intent",
+    "classreferences",
+    "example",
+    "keyimplementationpoints",
+    "responsibilities",
+    "collaborators"
+  ]
+}

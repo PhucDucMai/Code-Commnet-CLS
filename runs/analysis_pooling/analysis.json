@@ -1,0 +1,200 @@
+{
+  "behaviour": {
+    "runs/ablation_cls_pooling": {
+      "empty_pct": 1.0982487384980706,
+      "mean_pred": 1.2816859602255861,
+      "mean_true": 1.1504897595725734,
+      "over_predict_pct": 17.972692193529237
+    }
+  },
+  "ablation": {
+    "threshold 0.5": {
+      "mean": 0.5720953252550133,
+      "std": 0.015880789586634664
+    },
+    "+ at least one label": {
+      "mean": 0.6042927823555617,
+      "std": 0.014465411087688984
+    },
+    "+ per-label thresholds": {
+      "mean": 0.6316753079079636,
+      "std": 0.014198959344403647
+    },
+    "+ thresholds + at least one": {
+      "mean": 0.6319729375008488,
+      "std": 0.01416936614982436
+    }
+  },
+  "ttests": {
+    "runs/ablation_cls_pooling": {
+      "mean_diff_ref_minus_run": 0.003546041008876455,
+      "ref_wins": 4,
+      "folds": 5,
+      "t": 1.0339382078960953,
+      "p": 0.3595765343277888
+    }
+  },
+  "ensemble": {
+    "runs": [
+      "runs/roberta_large_rtx5060",
+      "runs/unixcoder-base",
+      "runs/deberta-v3-large",
+      "runs/modernbert-large"
+    ],
+    "metrics": {
+      "precision_micro": {
+        "mean": 0.7750183746809343,
+        "std": 0.013550456406156498
+      },
+      "recall_micro": {
+        "mean": 0.8738402080751246,
+        "std": 0.006832787503566791
+      },
+      "f1_micro": {
+        "mean": 0.8213980306244248,
+        "std": 0.008547984535664504
+      },
+      "precision_macro": {
+        "mean": 0.7796499099519515,
+        "std": 0.015701586418666525
+      },
+      "recall_macro": {
+        "mean": 0.8526770001594766,
+        "std": 0.006024482939810531
+      },
+      "f1_macro": {
+        "mean": 0.8086998683459099,
+        "std": 0.013303086019466292
+      },
+      "precision_samples": {
+        "mean": 0.8223572035312087,
+        "std": 0.008399453798805334
+      },
+      "recall_samples": {
+        "mean": 0.8867358905787771,
+        "std": 0.007796143015934104
+      },
+      "f1_samples": {
+        "mean": 0.838236139571956,
+        "std": 0.007637557431656549
+      },
+      "roc_auc_micro": {
+        "mean": 0.986537657996068,
+        "std": 0.001399739144716286
+      },
+      "roc_auc_macro": {
+        "mean": 0.9814653532075,
+        "std": 0.002776549336374483
+      },
+      "pr_auc_micro": {
+        "mean": 0.8973210447954131,
+        "std": 0.007144283795030259
+      },
+      "pr_auc_macro": {
+        "mean": 0.8614028755451606,
+        "std": 0.015806070755207808
+      },
+      "hamming_loss": {
+        "mean": 0.023018631658738367,
+        "std": 0.001245173959761077
+      },
+      "subset_accuracy": {
+        "mean": 0.7063094032597632,
+        "std": 0.013167887539933249
+      },
+      "jaccard_samples": {
+        "mean": 0.8049333363714275,
+        "std": 0.008584472846548685
+      }
+    },
+    "diff_vs_reference": [
+      0.02125392072996868,
+      0.03127326880119152,
+      0.0223788328387734,
+      0.02803958861651168,
+      0.02620974806405285
+    ],
+    "t": 14.059955082432095,
+    "p": 0.0001484941904953678
+  },
+  "errors": {
+    "top_confusions": [
+      {
+        "missed": "expand_java",
+        "predicted": "summary_java",
+        "count": 46
+      },
+      {
+        "missed": "expand_java",
+        "predicted": "usage_java",
+        "count": 46
+      },
+      {
+        "missed": "parameters",
+        "predicted": "usage_python",
+        "count": 31
+      },
+      {
+        "missed": "usage_python",
+        "predicted": "expand_python",
+        "count": 31
+      },
+      {
+        "missed": "expand_python",
+        "predicted": "summary_python",
+        "count": 30
+      },
+      {
+        "missed": "developmentnotes",
+        "predicted": "summary_python",
+        "count": 30
+      },
+      {
+        "missed": "parameters",
+        "predicted": "expand_python",
+        "count": 30
+      },
+      {
+        "missed": "developmentnotes",
+        "predicted": "parameters",
+        "count": 30
+      },
+      {
+        "missed": "usage_python",
+        "predicted": "developmentnotes",
+        "count": 30
+      },
+      {
+        "missed": "parameters",
+        "predicted": "developmentnotes",
+        "count": 28
+      }
+    ],
+    "exact_match": {
+      "1 true label(s)": {
+        "pct": 70.87195331273601,
+        "n": 5826
+      },
+      "2 true label(s)": {
+        "pct": 51.9607843137255,
+        "n": 816
+      },
+      "3+ true labels": {
+        "pct": 33.33333333333333,
+        "n": 96
+      },
+      "lang JAVA": {
+        "pct": 71.42266335814723,
+        "n": 2418
+      },
+      "lang PY": {
+        "pct": 62.70058708414873,
+        "n": 2555
+      },
+      "lang PHARO": {
+        "pct": 71.16147308781869,
+        "n": 1765
+      }
+    }
+  }
+}

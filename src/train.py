@@ -373,9 +373,13 @@ class TransformerClassifier(nn.Module):
         lora_dropout: float = 0.1,
         lora_target_modules=None,
         gradient_checkpointing: bool = False,
+        pooling: str = "mean",
     ):
         super().__init__()
+        if pooling not in ("mean", "cls"):
+            raise ValueError(f"pooling must be 'mean' or 'cls', got {pooling!r}")
         self.num_labels = num_labels
+        self.pooling = pooling
         self.use_lora = use_lora and HAS_PEFT
 
         self.encoder = AutoModel.from_pretrained(model_name)
@@ -415,11 +419,15 @@ class TransformerClassifier(nn.Module):
         outputs = self.encoder(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
         last_hidden = outputs.last_hidden_state  # (B, L, H)
 
-        # Mean pooling over non-padding tokens (attention mask)
-        mask = attention_mask.unsqueeze(-1).float()
-        summed = (last_hidden * mask).sum(dim=1)
-        denom = mask.sum(dim=1).clamp(min=1e-6)
-        pooled = summed / denom
+        if self.pooling == "cls":
+            # First token: <s> for RoBERTa, [CLS] for BERT-style tokenizers
+            pooled = last_hidden[:, 0]
+        else:
+            # Mean pooling over non-padding tokens (attention mask)
+            mask = attention_mask.unsqueeze(-1).float()
+            summed = (last_hidden * mask).sum(dim=1)
+            denom = mask.sum(dim=1).clamp(min=1e-6)
+            pooled = summed / denom
 
         logits = self.classifier(pooled)
         return logits
@@ -437,6 +445,7 @@ def build_model(config, num_labels):
         lora_dropout=peft_cfg.get("dropout", 0.1),
         lora_target_modules=peft_cfg.get("target_modules", None),
         gradient_checkpointing=config.get("gradient_checkpointing", False),
+        pooling=config.get("pooling", "mean"),  # configs without the key keep mean pooling
     )
 
 
@@ -880,7 +889,7 @@ def train_fold(
     model_desc = config["model_name"] + (
         f" + LoRA r={peft_cfg.get('r')} α={peft_cfg.get('alpha')} on {model.lora_targets}"
         if model.use_lora else " (full fine-tune)"
-    )
+    ) + f" · {model.pooling} pooling"
     log("\n" + style(DOUBLE_RULE, "cyan"))
     log(style(f"FOLD {fold_idx+1}/{n_folds}", "bold", "cyan")
         + f"   train {len(train_df):,} sentences · val {len(val_df):,} sentences")
@@ -1125,7 +1134,7 @@ def log_run_header(cfg_path, config, device, df, labels_mat, label_cols, results
         ("Config", str(cfg_path)),
         ("Output", f"{results_dir}/  (log: {results_dir / 'train.log'})"),
         ("Device", f"{dev} · precision {config.get('precision', 'fp32')}"),
-        ("Model", f"{config['model_name']} · {lora} · max_len {config['max_len']}"),
+        ("Model", f"{config['model_name']} · {lora} · {config.get('pooling', 'mean')} pooling · max_len {config['max_len']}"),
         ("Optim", f"AdamW lr {tp['lr']} · wd {tp['weight_decay']} · {tp['scheduler']} warmup {tp['warmup']}"
                   f" · batch {tp['batch_size']}×{tp['grad_accum']}={int(tp['batch_size']) * int(tp['grad_accum'])}"),
         ("Schedule", f"up to {tp['epochs']} epochs · early stop {config['logging'].get('early_stop', 6)}"
@@ -1193,6 +1202,8 @@ def apply_cli_overrides(config, args):
         config["train_params"]["grad_accum"] = args.grad_accum
     if getattr(args, "resume", False):
         config.setdefault("cv", {})["skip_if_checkpoint_exists"] = True
+    if getattr(args, "pooling", None):
+        config["pooling"] = args.pooling
     out = args.output_dir or (f"runs/{args.model.rstrip('/').split('/')[-1].lower()}" if args.model else None)
     if out:
         config["logging"]["output_dir"] = out
@@ -1215,6 +1226,8 @@ def main():
     parser.add_argument("--grad-accum", type=int, help="Override train_params.grad_accum")
     parser.add_argument("--resume", action="store_true",
                         help="Skip folds that already have a checkpoint (resume after an interruption)")
+    parser.add_argument("--pooling", choices=["mean", "cls"],
+                        help="Override the sentence representation: mean of the tokens, or the first token (<s> / [CLS])")
     args = parser.parse_args()
 
     cfg_path = Path(args.config)

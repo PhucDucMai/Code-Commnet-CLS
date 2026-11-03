@@ -1,0 +1,103 @@
+# ABLATION: first-token pooling instead of mean pooling
+#
+# IDENTICAL to configs/train_rtx5060.yaml (same model, LoRA, prompt, loss, sampler, thresholds,
+# folds, seed, epochs, batch) except the sentence representation:
+#   pooling: "cls"  -> the vector of the first token <s> (RoBERTa’s [CLS]) instead of the mean of all tokens
+# so the difference with runs/roberta_large_rtx5060 measures the effect of mean pooling alone.
+#
+#   python src/train.py configs/ablation_cls_pooling.yaml   (or let scripts/run_experiments.py run it)
+#   python scripts/compare_runs.py runs/roberta_large_rtx5060 runs/ablation_cls_pooling --out runs/comparison_pooling
+
+model_name: "roberta-large"
+tokenizer_name: "roberta-large"
+num_labels: 19
+max_len: 128
+pooling: "cls"                   # <-- the only modelling change: first token (<s>) instead of mean pooling
+
+precision: "bf16"                # RTX 30xx and newer support bf16; faster and less VRAM than fp32
+gradient_checkpointing: false    # do not enable together with LoRA (see the README)
+use_single_split: false
+
+cv:                              # a SINGLE cv key (the original config repeats it, which skips fold 0)
+  n_splits: 5
+  start_fold: 0
+  skip_if_checkpoint_exists: true   # if interrupted, re-run the same command to continue training
+
+text_features:
+  include_lang: true
+  include_class_id: true
+  template: "[{lang}] {class_id} | {sentence}"
+
+peft:
+  enabled: true
+  r: 32
+  alpha: 64
+  dropout: 0.05
+  target_modules: ["query", "key", "value", "dense"]
+
+loss_type: "asl"
+loss_params:
+  gamma_pos: 0
+  gamma_neg: 4
+  clip: 0.05
+
+sampler:
+  enabled: true
+  type: "weighted"
+  smooth_eps: 1e-3
+
+train_params:
+  batch_size: 16                 # OOM -> lower to 8 and raise grad_accum to 8
+  eval_batch_size: 32
+  grad_accum: 4
+  epochs: 30                     # original: 100; early stopping usually stops much earlier
+  lr: 0.00005
+  scheduler: "cosine"
+  warmup: 0.10
+  weight_decay: 0.01
+  seed: 42
+  num_workers: 4
+
+data:
+  raw_path: "data/raw/sentences.csv"
+  processed_path: "data/processed/"
+  expand_to_19_classes: true
+  label_list:
+    # 7 Java
+    - summary_java
+    - pointer
+    - deprecation
+    - rational
+    - ownership
+    - usage_java
+    - expand_java
+    # 5 Python
+    - summary_python
+    - parameters
+    - usage_python
+    - developmentnotes
+    - expand_python
+    # 7 Pharo
+    - keymessages
+    - intent
+    - classreferences
+    - example
+    - keyimplementationpoints
+    - responsibilities
+    - collaborators
+
+eval:
+  metrics: ["precision", "recall", "f1", "roc_auc", "pr_auc"]
+  threshold_search: true
+
+logging:
+  output_dir: "runs/ablation_cls_pooling"
+  save_best: true
+  early_stop: 5                  # original: 10
+  min_epochs: 10                 # no early stopping before epoch 10
+  save_trainable_only: true      # save only LoRA + classifier head (~tens of MB instead of ~1.4 GB per checkpoint);
+                                 # the base encoder is reloaded from HuggingFace when loading
+  tensorboard: false
+
+final_training:                   # the ablation is only for the comparison, no final model needed
+  enabled: false

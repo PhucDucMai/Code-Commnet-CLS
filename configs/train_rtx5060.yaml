@@ -3,6 +3,7 @@ model_name: "roberta-large"
 tokenizer_name: "roberta-large"
 num_labels: 19
 max_len: 128
+pooling: "mean"                  # sentence vector: "mean" of the non-padding tokens | "cls" = first token (<s>)
 
 precision: "bf16"                # RTX 30xx and newer support bf16; faster and less VRAM than fp32
 gradient_checkpointing: false    # do not enable together with LoRA (see the README)

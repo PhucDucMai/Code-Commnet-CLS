@@ -45,6 +45,12 @@ experiments:
     batch_size: 16
     grad_accum: 4
 
+  - name: ablation-cls-pooling        # same as ours, first token <s> instead of mean pooling (~2 h 40 min)
+    config: configs/ablation_cls_pooling.yaml
+    output_dir: runs/ablation_cls_pooling
+    batch_size: 16
+    grad_accum: 4
+
   # Add any model; enabled: false to skip it for now
   - name: roberta-base
     model: roberta-base
@@ -62,3 +68,4 @@ compare_runs:
   - runs/unixcoder-base
   - runs/deberta-v3-large
   - runs/modernbert-large
+  - runs/ablation_cls_pooling         # pooling ablation (compare with runs/roberta_large_rtx5060)
