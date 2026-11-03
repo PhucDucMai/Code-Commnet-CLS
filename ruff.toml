@@ -1,0 +1,4 @@
+# Lint settings (used by CI and by `ruff check .`).
+# legacy/ (upstream scripts, documented as not runnable) and references/ (third-party code) are not linted.
+extend-exclude = ["legacy", "references"]
+line-length = 120
